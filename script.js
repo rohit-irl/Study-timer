@@ -111,11 +111,25 @@ const DOM = {
 
 /**
  * Initialize the entire application
+ * Check authentication status first, then setup UI
  */
 function initializeApp() {
     loadTheme();
     setupEventListeners();
-    checkUserSession();
+    
+    // Check if user is authenticated on page load
+    // If not logged in, stay on login screen
+    // If logged in, show dashboard
+    if (!checkAuth()) {
+        // User is not authenticated
+        // Authentication check will display login screen
+        return;
+    }
+    
+    // User is authenticated, load dashboard data
+    appState.currentUser = JSON.parse(localStorage.getItem(CONFIG.CURRENT_USER_KEY));
+    showDashboard();
+    updateUI();
     loadMotivation();
 }
 
@@ -150,15 +164,91 @@ function setupEventListeners() {
 // ==========================================
 
 /**
- * Check if user is already logged in
+ * Check if user has a valid session
+ * Returns true if authenticated, false otherwise
+ * If not authenticated, displays login screen
  */
-function checkUserSession() {
+function checkAuth() {
     const currentUser = localStorage.getItem(CONFIG.CURRENT_USER_KEY);
-    if (currentUser) {
-        appState.currentUser = JSON.parse(currentUser);
-        showDashboard();
-        updateUI();
+    
+    if (!currentUser) {
+        // No user session found in localStorage
+        // Ensure clean state by clearing any stray data
+        clearAllSessionData();
+        
+        // Display login screen on the page
+        showAuthScreen();
+        
+        // Prevent history back navigation to dashboard
+        // Use replaceState to overwrite browser history
+        history.replaceState(null, '', window.location.href);
+        
+        // Return false to indicate user is not authenticated
+        return false;
     }
+    
+    // User session exists and is valid
+    return true;
+}
+
+/**
+ * Clear all session data and redirect user to login screen
+ * Called when user logs out or session expires
+ * Ensures complete cleanup before redirect
+ */
+function redirectToLogin() {
+    // Clear the current user session from localStorage
+    // This is the main indicator that user is logged out
+    localStorage.removeItem(CONFIG.CURRENT_USER_KEY);
+    
+    // Clear app state variables
+    appState.currentUser = null;
+    appState.timerRunning = false;
+    appState.timerPaused = false;
+    
+    // Stop any running timer intervals
+    // Prevents timer from continuing in background after logout
+    if (appState.timerInterval) {
+        clearInterval(appState.timerInterval);
+        appState.timerInterval = null;
+    }
+    
+    // Reset timer state variables
+    appState.sessionStartTime = null;
+    appState.sessionPausedTime = 0;
+    
+    // Display login screen and hide dashboard
+    showAuthScreen();
+    
+    // Clear form inputs to prevent data from showing to next user
+    const loginForm = document.getElementById('loginForm');
+    const signupForm = document.getElementById('signupForm');
+    if (loginForm) loginForm.reset();
+    if (signupForm) signupForm.reset();
+    
+    // Prevent user from using back button to return to dashboard
+    // replaceState overwrites the current history entry instead of adding new one
+    // This makes back button go to previous page, not dashboard
+    history.replaceState(null, '', window.location.href);
+}
+
+/**
+ * Clear all session data before logout/redirect
+ * Helper function to ensure complete cleanup
+ */
+function clearAllSessionData() {
+    // Stop timer if running
+    if (appState.timerInterval) {
+        clearInterval(appState.timerInterval);
+        appState.timerInterval = null;
+    }
+    
+    // Clear all app state
+    appState.currentUser = null;
+    appState.timerRunning = false;
+    appState.timerPaused = false;
+    appState.sessionStartTime = null;
+    appState.sessionPausedTime = 0;
 }
 
 /**
@@ -175,9 +265,17 @@ function handleLogin(e) {
 
     // Check if user exists and password matches
     if (users[username] && users[username].password === password) {
+        // Login successful
         appState.currentUser = { username, name: users[username].name };
         localStorage.setItem(CONFIG.CURRENT_USER_KEY, JSON.stringify(appState.currentUser));
+        
         showNotification('✅ Welcome back!', 'success');
+        
+        // Replace history state so back button doesn't return to login
+        // This prevents user from going back to login after successful authentication
+        history.replaceState(null, '', window.location.href);
+        
+        // Display dashboard
         showDashboard();
         updateUI();
     } else {
@@ -227,11 +325,16 @@ function handleSignup(e) {
     // Initialize user data
     initializeUserData(username);
 
-    // Auto-login
+    // Auto-login the newly created user
     appState.currentUser = { username, name };
     localStorage.setItem(CONFIG.CURRENT_USER_KEY, JSON.stringify(appState.currentUser));
 
     showNotification('✅ Account created! Welcome!', 'success');
+    
+    // Replace history state so back button doesn't return to signup
+    // This prevents user from going back to signup after successful account creation
+    history.replaceState(null, '', window.location.href);
+    
     showDashboard();
     updateUI();
 }
@@ -260,16 +363,20 @@ function initializeUserData(username) {
 }
 
 /**
- * Handle logout
+ * Handle logout action
+ * Called when user clicks logout button
+ * Cleans up session and redirects to login
  */
 function handleLogout() {
     if (confirm('Are you sure you want to logout?')) {
-        localStorage.removeItem(CONFIG.CURRENT_USER_KEY);
-        appState.currentUser = null;
-        resetTimer();
-        showAuthScreen();
+        // User confirmed logout
+        // Call redirectToLogin to clean up all session data and redirect
+        redirectToLogin();
+        
+        // Show logout notification to confirm action
         showNotification('👋 You have been logged out', 'success');
     }
+    // If user cancels confirmation dialog, nothing happens
 }
 
 // ==========================================
@@ -785,12 +892,38 @@ function loadTheme() {
 // ==========================================
 // START APPLICATION
 // ==========================================
+// ==========================================
+// START APPLICATION & PAGE LIFECYCLE
+// ==========================================
+
 window.addEventListener('load', initializeApp);
 
-// Save state on page unload
+/**
+ * Check authentication when page becomes visible
+ * This handles cases where user may have logged out in another tab
+ * or when they return to the page after being in another browser tab
+ */
+document.addEventListener('visibilitychange', () => {
+    if (!document.hidden && appState.currentUser) {
+        // Page became visible and user is supposedly logged in
+        // Verify the session is still valid in localStorage
+        if (!checkAuth()) {
+            // Session was somehow cleared (e.g., logged out in another tab)
+            // Redirect to login immediately
+            redirectToLogin();
+            showNotification('⚠️ Your session has ended. Please login again.', 'error');
+        }
+    }
+});
+
+/**
+ * Save session state before page unload
+ * Preserves timer state so it can resume on next page load
+ */
 window.addEventListener('beforeunload', () => {
     if (appState.currentUser && appState.timerRunning) {
-        // Session automatically resumes on next load
+        // Timer is running, save current session time
+        // This allows timer to resume from the same point on next load
         appState.sessionPausedTime = getSessionSeconds();
     }
 });
