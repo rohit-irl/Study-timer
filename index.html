@@ -3,174 +3,245 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DSA Study Timer & Progress Tracker</title>
+    <title>Smart Study Timer with Streak System</title>
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto+Mono:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Header -->
-    <header class="header">
-        <div class="container">
-            <div class="header-content">
-                <h1>📚 DSA Study Timer</h1>
-                <button id="themToggle" class="theme-toggle" title="Toggle Dark Mode">🌙</button>
-            </div>
-        </div>
-    </header>
-
-    <!-- Main Container -->
-    <main class="container">
-        <!-- Dashboard Stats -->
-        <section class="dashboard-stats">
-            <div class="stat-card">
-                <div class="stat-icon">⏱️</div>
-                <div class="stat-content">
-                    <p class="stat-label">Today's Study Time</p>
-                    <p class="stat-value" id="totalStudyTime">0h 0m</p>
-                </div>
-            </div>
-
-            <div class="stat-card">
-                <div class="stat-icon">✅</div>
-                <div class="stat-content">
-                    <p class="stat-label">Problems Solved</p>
-                    <p class="stat-value" id="problemsSolved">0</p>
-                </div>
-            </div>
-
-            <div class="stat-card">
-                <div class="stat-icon">📊</div>
-                <div class="stat-content">
-                    <p class="stat-label">Study Streak</p>
-                    <p class="stat-value" id="streakCount">0 days</p>
-                </div>
-            </div>
-
-            <div class="stat-card progress-card">
-                <div class="stat-icon">🎯</div>
-                <div class="stat-content">
-                    <p class="stat-label">Daily Goal Progress</p>
-                    <div class="progress-bar">
-                        <div class="progress-fill" id="goalProgress"></div>
-                    </div>
-                    <p class="stat-value small" id="goalPercentage">0%</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Motivational Message -->
-        <div class="motivational-message" id="motivationalMessage">
-            💡 Keep going! Every problem solved is a step towards mastery.
-        </div>
-
-        <!-- Study Timer Section -->
-        <section class="timer-section">
-            <h2>Study Timer</h2>
-            <div class="timer-card">
-                <div class="timer-display" id="timerDisplay">00:00:00</div>
+    <!-- ========== AUTH SCREENS ========== -->
+    
+    <!-- Login Screen -->
+    <div id="loginScreen" class="auth-screen active">
+        <div class="auth-container">
+            <div class="auth-box">
+                <h1 class="auth-title">📚 Study Timer</h1>
+                <p class="auth-subtitle">Track, Streak, Dominate</p>
                 
-                <div class="timer-info">
-                    <div class="timer-stat">
-                        <span class="label">Current Session</span>
-                        <span class="value" id="sessionTime">00:00:00</span>
-                    </div>
-                    <div class="timer-stat">
-                        <span class="label">Total Today</span>
-                        <span class="value" id="totalTodayTime">00:00:00</span>
-                    </div>
-                </div>
-
-                <div class="timer-controls">
-                    <button id="startBtn" class="btn btn-primary">Start</button>
-                    <button id="pauseBtn" class="btn btn-secondary" disabled>Pause</button>
-                    <button id="resumeBtn" class="btn btn-secondary" disabled>Resume</button>
-                    <button id="resetBtn" class="btn btn-danger">Reset</button>
-                </div>
-
-                <div class="timer-options">
-                    <label for="dailyGoalInput">Daily Goal (hours):</label>
-                    <input type="number" id="dailyGoalInput" min="1" max="24" step="0.5" value="5">
-                    <button id="setGoalBtn" class="btn btn-small">Set Goal</button>
-                </div>
-            </div>
-        </section>
-
-        <!-- DSA Progress Tracker Section -->
-        <section class="tracker-section">
-            <h2>DSA Progress Tracker</h2>
-
-            <!-- Problem Input Form -->
-            <div class="tracker-card input-card">
-                <h3>Add New Problem</h3>
-                <form id="problemForm" class="problem-form">
-                    <div class="form-row">
-                        <input 
-                            type="text" 
-                            id="problemName" 
-                            placeholder="Enter problem name (e.g., Two Sum)" 
-                            required
-                        >
+                <form id="loginForm" class="auth-form">
+                    <div class="form-group">
+                        <label for="loginUsername">Username or Email</label>
+                        <input type="text" id="loginUsername" placeholder="Enter username" required>
                     </div>
 
-                    <div class="form-row">
-                        <select id="problemDifficulty" required>
-                            <option value="">Select Difficulty</option>
-                            <option value="Easy">Easy</option>
-                            <option value="Medium">Medium</option>
-                            <option value="Hard">Hard</option>
-                        </select>
-
-                        <select id="problemStatus" required>
-                            <option value="">Select Status</option>
-                            <option value="Solved">Solved</option>
-                            <option value="Unsolved">Unsolved</option>
-                            <option value="Revision">Revision</option>
-                        </select>
+                    <div class="form-group">
+                        <label for="loginPassword">Password</label>
+                        <input type="password" id="loginPassword" placeholder="Enter password" required>
                     </div>
 
-                    <button type="submit" class="btn btn-success">Add Problem</button>
+                    <button type="submit" class="btn btn-primary full-width">Login</button>
                 </form>
-            </div>
 
-            <!-- Difficulty Counters -->
-            <div class="difficulty-counters">
-                <div class="counter-card easy">
-                    <span class="difficulty-label">Easy</span>
-                    <span class="difficulty-count" id="easyCount">0</span>
-                </div>
-                <div class="counter-card medium">
-                    <span class="difficulty-label">Medium</span>
-                    <span class="difficulty-count" id="mediumCount">0</span>
-                </div>
-                <div class="counter-card hard">
-                    <span class="difficulty-label">Hard</span>
-                    <span class="difficulty-count" id="hardCount">0</span>
+                <p class="auth-toggle">Don't have an account? <a href="#" onclick="switchToSignup(event)">Sign up</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Signup Screen -->
+    <div id="signupScreen" class="auth-screen">
+        <div class="auth-container">
+            <div class="auth-box">
+                <h1 class="auth-title">📚 Study Timer</h1>
+                <p class="auth-subtitle">Join the Learning Journey</p>
+                
+                <form id="signupForm" class="auth-form">
+                    <div class="form-group">
+                        <label for="signupName">Full Name</label>
+                        <input type="text" id="signupName" placeholder="Enter your name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="signupUsername">Username</label>
+                        <input type="text" id="signupUsername" placeholder="Choose a username" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="signupEmail">Email (optional)</label>
+                        <input type="email" id="signupEmail" placeholder="Enter email">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="signupPassword">Password</label>
+                        <input type="password" id="signupPassword" placeholder="Create password" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="signupConfirm">Confirm Password</label>
+                        <input type="password" id="signupConfirm" placeholder="Confirm password" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary full-width">Create Account</button>
+                </form>
+
+                <p class="auth-toggle">Already have an account? <a href="#" onclick="switchToLogin(event)">Login</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== MAIN DASHBOARD ========== -->
+    
+    <div id="dashboard" class="dashboard" style="display: none;">
+        <!-- Header -->
+        <header class="header">
+            <div class="container">
+                <div class="header-content">
+                    <div class="header-left">
+                        <h1 class="logo">📚 Study Timer</h1>
+                        <span class="user-greeting" id="userGreeting">Welcome!</span>
+                    </div>
+                    <div class="header-right">
+                        <button id="themToggle" class="theme-toggle" title="Toggle Dark Mode">🌙</button>
+                        <button id="logoutBtn" class="btn btn-small btn-secondary">Logout</button>
+                    </div>
                 </div>
             </div>
+        </header>
 
-            <!-- Problems List -->
-            <div class="tracker-card problems-card">
-                <div class="problems-header">
-                    <h3>Problems List</h3>
-                    <div class="problems-controls">
-                        <button id="exportBtn" class="btn btn-small btn-info" title="Export as JSON">📥 Export</button>
-                        <button id="clearAllBtn" class="btn btn-small btn-warning" title="Clear all problems">🗑️ Clear All</button>
+        <!-- Main Container -->
+        <main class="container">
+            <!-- Quick Stats -->
+            <section class="quick-stats">
+                <div class="stat-card">
+                    <div class="stat-icon">🔥</div>
+                    <div class="stat-content">
+                        <p class="stat-label">Current Streak</p>
+                        <p class="stat-value" id="currentStreak">0</p>
+                        <p class="stat-sublabel" id="streakMessage">days</p>
                     </div>
                 </div>
 
-                <div id="problemsList" class="problems-list">
-                    <p class="empty-message">No problems added yet. Start tracking your progress! 🚀</p>
+                <div class="stat-card">
+                    <div class="stat-icon">🏆</div>
+                    <div class="stat-content">
+                        <p class="stat-label">Best Streak</p>
+                        <p class="stat-value" id="bestStreak">0</p>
+                        <p class="stat-sublabel">days</p>
+                    </div>
                 </div>
-            </div>
-        </section>
-    </main>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <p>Made for DSA Enthusiasts | Study Smart, Code Smarter 💻</p>
-    </footer>
+                <div class="stat-card">
+                    <div class="stat-icon">⏱️</div>
+                    <div class="stat-content">
+                        <p class="stat-label">Total Time</p>
+                        <p class="stat-value" id="lifetimeTotal">0h</p>
+                        <p class="stat-sublabel">lifetime</p>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">📅</div>
+                    <div class="stat-content">
+                        <p class="stat-label">This Week</p>
+                        <p class="stat-value" id="weekTotal">0h</p>
+                        <p class="stat-sublabel" id="todayDisplay">Today: 0h</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Timer Section -->
+            <section class="timer-section">
+                <div class="timer-card">
+                    <div class="timer-header">
+                        <h2>Session Timer</h2>
+                        <div class="timer-displays">
+                            <div class="time-item">
+                                <span class="time-label">Current Session</span>
+                                <span class="time-display" id="sessionDisplay">00:00:00</span>
+                            </div>
+                            <div class="time-item">
+                                <span class="time-label">Today's Total</span>
+                                <span class="time-display" id="todayDisplay2">00:00:00</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timer-main">
+                        <div class="big-timer" id="bigTimer">00:00:00</div>
+                    </div>
+
+                    <div class="timer-controls">
+                        <button id="startBtn" class="btn btn-primary btn-large">Start</button>
+                        <button id="pauseBtn" class="btn btn-secondary btn-large" disabled>Pause</button>
+                        <button id="resumeBtn" class="btn btn-secondary btn-large" disabled>Resume</button>
+                        <button id="stopBtn" class="btn btn-success btn-large">Stop</button>
+                        <button id="resetBtn" class="btn btn-danger btn-large">Reset</button>
+                    </div>
+
+                    <!-- Goal Section -->
+                    <div class="goal-section">
+                        <div class="goal-input-group">
+                            <label for="goalHours">Daily Goal (hours):</label>
+                            <input type="number" id="goalHours" min="0.5" max="24" step="0.5" value="4">
+                            <button id="setGoalBtn" class="btn btn-small">Set Goal</button>
+                        </div>
+                        
+                        <div class="progress-container">
+                            <div class="progress-label">
+                                <span id="goalLabel">Goal Progress</span>
+                                <span id="goalPercent">0%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="progressFill"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Motivation Section -->
+            <section class="motivation-section">
+                <div class="motivation-card" id="motivationCard">
+                    <span class="motivation-emoji">💡</span>
+                    <p id="motivationText">Keep pushing! You're building great habits.</p>
+                    <button id="newMotivationBtn" class="btn btn-small btn-secondary">New Message</button>
+                </div>
+            </section>
+
+            <!-- Daily Tracking -->
+            <section class="tracking-section">
+                <div class="tracking-card">
+                    <h3>📊 Daily Tracking</h3>
+                    <div class="tracking-grid">
+                        <div class="tracking-item">
+                            <span class="tracking-label">Today</span>
+                            <span class="tracking-value" id="todayTracking">0h 0m</span>
+                        </div>
+                        <div class="tracking-item">
+                            <span class="tracking-label">Yesterday</span>
+                            <span class="tracking-value" id="yesterdayTracking">0h 0m</span>
+                        </div>
+                        <div class="tracking-item">
+                            <span class="tracking-label">This Week</span>
+                            <span class="tracking-value" id="weekTracking">0h 0m</span>
+                        </div>
+                        <div class="tracking-item">
+                            <span class="tracking-label">Best Day</span>
+                            <span class="tracking-value" id="bestDayTracking">0h 0m</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Session History -->
+            <section class="history-section">
+                <div class="history-card">
+                    <h3>📈 Last 7 Days</h3>
+                    <div class="chart-container">
+                        <div class="chart" id="studyChart"></div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>Study Smart • Track Consistent • Build Discipline 💪</p>
+        </footer>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="notification" class="notification"></div>
 
     <!-- Scripts -->
     <script src="script.js"></script>
