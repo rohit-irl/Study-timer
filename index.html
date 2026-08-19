@@ -156,6 +156,15 @@
                         </div>
                     </div>
 
+                    <!-- Active Task Banner -->
+                    <div id="activeTaskBanner" class="active-task-banner">
+                        <span class="active-task-icon">🎯</span>
+                        <div class="active-task-info">
+                            <span class="active-task-label">Currently Studying</span>
+                            <span class="active-task-name" id="activeTaskName">No task selected — Pick a task below to start</span>
+                        </div>
+                    </div>
+
                     <div class="timer-main">
                         <div class="big-timer" id="bigTimer">00:00:00</div>
                     </div>
@@ -168,23 +177,41 @@
                         <button id="resetBtn" class="btn btn-danger btn-large">Reset</button>
                     </div>
 
-                    <!-- Goal Section -->
-                    <div class="goal-section">
-                        <div class="goal-input-group">
-                            <label for="goalHours">Daily Goal (hours):</label>
-                            <input type="number" id="goalHours" min="0.5" max="24" step="0.5" value="4">
-                            <button id="setGoalBtn" class="btn btn-small">Set Goal</button>
-                        </div>
-                        
-                        <div class="progress-container">
-                            <div class="progress-label">
-                                <span id="goalLabel">Goal Progress</span>
-                                <span id="goalPercent">0%</span>
+                    <!-- Daily Progress Section -->
+                    <div class="daily-progress-section">
+                        <div class="progress-header">
+                            <div class="progress-info">
+                                <span class="progress-title">Today's Progress</span>
+                                <span class="progress-tasks-count" id="taskCompletionCount">0 / 0 Tasks Completed</span>
                             </div>
-                            <div class="progress-bar">
-                                <div class="progress-fill" id="progressFill"></div>
-                            </div>
+                            <span class="progress-percent" id="taskCompletionPercent">0%</span>
                         </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="taskProgressFill"></div>
+                        </div>
+                        <div class="completion-banner" id="completionBanner" style="display: none;">
+                            🎉 Daily Goal Completed!
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Today's Tasks Section -->
+            <section class="tasks-section">
+                <div class="tasks-card">
+                    <div class="tasks-header">
+                        <div class="tasks-header-left">
+                            <h2>📋 Today's Tasks</h2>
+                            <span class="task-date-badge" id="taskDateBadge">Today</span>
+                        </div>
+                        <div class="tasks-header-right">
+                            <button id="copyYesterdayBtn" class="btn btn-secondary btn-small" style="display: none;">📋 Copy Yesterday's Tasks</button>
+                            <button id="addTaskBtn" class="btn btn-primary btn-small">+ Add Task</button>
+                        </div>
+                    </div>
+                    
+                    <div class="tasks-list" id="tasksList">
+                        <!-- Dynamic content populated by JS -->
                     </div>
                 </div>
             </section>
@@ -238,6 +265,37 @@
         <footer class="footer">
             <p>Study Smart • Track Consistent • Build Discipline 💪</p>
         </footer>
+    </div>
+
+    <!-- Task Add/Edit Modal -->
+    <div id="taskModal" class="modal-backdrop">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3 id="modalTitle">Add New Task</h3>
+                <button id="closeModalBtn" class="modal-close-btn" type="button">&times;</button>
+            </div>
+            <form id="taskForm">
+                <input type="hidden" id="taskId">
+                <div class="form-group">
+                    <label for="taskName">Task Name / Subject *</label>
+                    <input type="text" id="taskName" placeholder="e.g. DSA, Aptitude, Reasoning" required>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="targetHours">Target Hours</label>
+                        <input type="number" id="targetHours" min="0" max="24" value="1" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="targetMinutes">Target Minutes</label>
+                        <input type="number" id="targetMinutes" min="0" max="59" value="0" step="1" required>
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" id="cancelTaskBtn" class="btn btn-secondary">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Task</button>
+                </div>
+            </form>
+        </div>
     </div>
 
     <!-- Notification Toast -->

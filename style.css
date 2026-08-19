@@ -1713,3 +1713,434 @@ body.dark-mode .btn-delete {
         padding: 0.2rem 0.5rem;
     }
 }
+
+/* ========================================
+   ACTIVE TASK BANNER
+   ======================================== */
+.active-task-banner {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.08), rgba(118, 75, 162, 0.08));
+    border: 2px dashed var(--primary);
+    border-radius: 12px;
+    padding: 0.875rem 1.25rem;
+    margin-bottom: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.active-task-banner.running {
+    background: linear-gradient(135deg, rgba(72, 187, 120, 0.12), rgba(56, 161, 105, 0.12));
+    border: 2px solid var(--success);
+    box-shadow: 0 0 15px rgba(72, 187, 120, 0.2);
+}
+
+.active-task-icon {
+    font-size: 1.8rem;
+}
+
+.active-task-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.active-task-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #718096;
+    font-weight: 600;
+}
+
+body.dark-mode .active-task-label {
+    color: #a0aec0;
+}
+
+.active-task-name {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+.active-task-banner.running .active-task-name {
+    color: var(--success);
+}
+
+/* ========================================
+   DAILY PROGRESS SECTION
+   ======================================== */
+.daily-progress-section {
+    border-top: 1px solid var(--border);
+    padding-top: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.progress-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+}
+
+.progress-title {
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--dark-text);
+}
+
+body.dark-mode .progress-title {
+    color: var(--dark-text);
+}
+
+.progress-tasks-count {
+    font-size: 0.85rem;
+    color: #718096;
+    margin-left: 0.5rem;
+    font-weight: 500;
+}
+
+body.dark-mode .progress-tasks-count {
+    color: #a0aec0;
+}
+
+.progress-percent {
+    font-weight: 700;
+    font-family: 'Roboto Mono', monospace;
+    font-size: 1.1rem;
+    color: var(--primary);
+}
+
+.completion-banner {
+    margin-top: 1rem;
+    background: linear-gradient(135deg, #48bb78, #38a169);
+    color: white;
+    font-weight: 700;
+    font-size: 1.1rem;
+    text-align: center;
+    padding: 0.875rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(72, 187, 120, 0.3);
+    animation: bounceIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes bounceIn {
+    0% { transform: scale(0.8); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+/* ========================================
+   TODAY'S TASKS SECTION
+   ======================================== */
+.tasks-section {
+    margin-bottom: 2rem;
+}
+
+.tasks-card {
+    background: white;
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.3s ease;
+}
+
+body.dark-mode .tasks-card {
+    background: rgba(30, 41, 59, 0.8);
+}
+
+.tasks-card:hover {
+    box-shadow: var(--shadow);
+}
+
+.tasks-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.tasks-header-left {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.tasks-header h2 {
+    font-size: 1.4rem;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.tasks-header h2::after {
+    display: none;
+}
+
+.task-date-badge {
+    background: rgba(102, 126, 234, 0.1);
+    color: var(--primary);
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.tasks-header-right {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.tasks-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+/* TASK CARDS */
+.task-item {
+    background: rgba(247, 250, 252, 0.8);
+    border: 2px solid var(--border);
+    border-radius: 14px;
+    padding: 1.25rem;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 0.875rem;
+    position: relative;
+    overflow: hidden;
+}
+
+body.dark-mode .task-item {
+    background: rgba(15, 23, 42, 0.4);
+    border-color: rgba(255, 255, 255, 0.08);
+}
+
+.task-item:hover {
+    border-color: var(--primary);
+    box-shadow: var(--shadow-sm);
+    transform: translateY(-2px);
+}
+
+.task-item.active-task {
+    border-color: var(--primary);
+    background: rgba(102, 126, 234, 0.06);
+    box-shadow: 0 0 15px rgba(102, 126, 234, 0.15);
+}
+
+.task-item.completed-task {
+    border-color: var(--success);
+    background: rgba(72, 187, 120, 0.04);
+}
+
+.task-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.task-item-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--dark-text);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.task-status-badge {
+    padding: 0.25rem 0.65rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.task-status-badge.completed {
+    background: rgba(72, 187, 120, 0.15);
+    color: var(--success);
+}
+
+.task-status-badge.in-progress {
+    background: rgba(237, 137, 54, 0.15);
+    color: var(--warning);
+}
+
+.task-status-badge.not-started {
+    background: rgba(160, 174, 192, 0.15);
+    color: #718096;
+}
+
+.task-item-details {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.9rem;
+    color: #4a5568;
+}
+
+body.dark-mode .task-item-details {
+    color: #cbd5e0;
+}
+
+.task-time-metrics {
+    display: flex;
+    gap: 1.25rem;
+}
+
+.task-metric {
+    display: flex;
+    gap: 0.35rem;
+}
+
+.task-metric-label {
+    color: #718096;
+    font-weight: 500;
+}
+
+.task-metric-value {
+    font-family: 'Roboto Mono', monospace;
+    font-weight: 700;
+}
+
+.task-progress-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.task-progress-bar {
+    width: 100%;
+    height: 10px;
+    background: var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.task-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #667eea, #764ba2);
+    border-radius: 6px;
+    transition: width 0.3s ease;
+}
+
+.task-item.completed-task .task-progress-fill {
+    background: linear-gradient(90deg, #48bb78, #38a169);
+}
+
+.task-item-actions {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: flex-end;
+    align-items: center;
+    margin-top: 0.25rem;
+}
+
+/* EMPTY TASKS STATE */
+.empty-tasks-state {
+    text-align: center;
+    padding: 3rem 1.5rem;
+    background: rgba(102, 126, 234, 0.03);
+    border: 2px dashed var(--border);
+    border-radius: 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.empty-tasks-icon {
+    font-size: 3rem;
+}
+
+.empty-tasks-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--dark-text);
+}
+
+.empty-tasks-sub {
+    font-size: 0.9rem;
+    color: #718096;
+    max-width: 400px;
+}
+
+/* ========================================
+   TASK MODAL
+   ======================================== */
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(5px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    padding: 1rem;
+}
+
+.modal-backdrop.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-box {
+    background: white;
+    width: 100%;
+    max-width: 450px;
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: var(--shadow-lg);
+    transform: scale(0.9);
+    transition: transform 0.3s ease;
+}
+
+body.dark-mode .modal-box {
+    background: #1e293b;
+    border: 1px solid var(--border);
+}
+
+.modal-backdrop.active .modal-box {
+    transform: scale(1);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.modal-header h3 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+.modal-close-btn {
+    background: none;
+    border: none;
+    font-size: 1.8rem;
+    color: #a0aec0;
+    cursor: pointer;
+    line-height: 1;
+    transition: color 0.2s ease;
+}
+
+.modal-close-btn:hover {
+    color: var(--danger);
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+}
